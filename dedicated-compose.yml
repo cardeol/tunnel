@@ -1,0 +1,39 @@
+version: "3"
+services:
+  gluetun:
+    context: ./gluetun
+    image: qmcgaw/gluetun
+    container_name: gluetun_dedicated
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    restart: unless-stopped
+    ports:
+      - 1082:8888/tcp # HTTP proxy
+      - 8388:8388/tcp # Shadowsocks
+      - 8388:8388/udp # Shadowsocks
+    volumes:
+      - ./gluetun:/gluetun
+    environment:
+      - HTTPPROXY=on
+      - SHADOWSOCKS=on
+      # See https://github.com/qdm12/gluetun-wiki/tree/main/setup#setup
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=openvpn
+      # OpenVPN:
+      - OPENVPN_USER=${OPENVPN_USER}
+      - OPENVPN_PASSWORD=${OPENVPN_PASSWORD}
+      - SERVER_HOSTNAMES=us10285.nordvpn.com
+      - SERVER_COUNTRIES=United States
+      - SERVER_NUMBER=10285
+      # - SERVER_COUNTRIES=United States
+      # SERVER_CATEGORIES=DedicatedIP
+      # Wireguard:
+      # - WIREGUARD_PRIVATE_KEY=wOEI9rqqbDwnN8/Bpp22sVz48T71vJ4fYmFWujulwUU=
+      # - WIREGUARD_ADDRESSES=10.64.222.21/32
+      # Timezone for accurate log times
+      # - TZ=
+      # Server list updater
+      # See https://github.com/qdm12/gluetun-wiki/blob/main/setup/servers.md#update-the-vpn-servers-list
+      # - UPDATER_PERIOD=
