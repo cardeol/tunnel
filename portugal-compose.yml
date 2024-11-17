@@ -1,6 +1,8 @@
-version: "3"
+name: tunnel_portugal
+
 services:
   gluetun:
+    env_file: .env
     build:
       context: ./gluetun
       dockerfile: Dockerfile
